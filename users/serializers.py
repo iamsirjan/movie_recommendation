@@ -56,6 +56,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LanguageSerializer(serializers.HyperlinkedModelSerializer):
     language = serializers.CharField(required=True,)
+    movie = serializers.PrimaryKeyRelatedField(
+        queryset=movie.objects.all(), many=True)
 
     class Meta:
         model = language
@@ -66,6 +68,8 @@ class LanguageSerializer(serializers.HyperlinkedModelSerializer):
 
 class GenreSerializer(serializers.HyperlinkedModelSerializer):
     genre = serializers.CharField(required=True)
+    movie = serializers.PrimaryKeyRelatedField(
+        queryset=movie.objects.all(), many=True)
 
     class Meta:
         model = genre
@@ -78,11 +82,8 @@ class MovieSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True,)
     video = serializers.CharField(required=True,)
 
-    genre = serializers.PrimaryKeyRelatedField(
-        queryset=genre.objects.all(), many=True)
-
-    language = serializers.PrimaryKeyRelatedField(
-        queryset=language.objects.all(), many=True)
+    genre = GenreSerializer(many=True, read_only=True)
+    language = LanguageSerializer(many=True, read_only=True)
 
     class Meta:
         model = movie

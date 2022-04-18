@@ -18,7 +18,7 @@ class user(AbstractUser, PermissionsMixin):
 
 
 class genre(models.Model):
-    genre_id = models.AutoField(primary_key=True)
+    # genre_id = models.AutoField(primary_key=True)
 
     genre = models.CharField(max_length=20)
 
@@ -27,22 +27,21 @@ class genre(models.Model):
 
 
 class language(models.Model):
-    language_id = models.AutoField(primary_key=True)
+    # language_id = models.AutoField(primary_key=True)
 
     language = models.CharField(max_length=20)
 
 
 class movie(models.Model):
-    movie_id = models.AutoField(primary_key=True)
+    # movie_id = models.AutoField(primary_key=True)
 
     name = models.CharField(unique=True, max_length=100)
     video = models.CharField(max_length=1000)
     # images = models.ImageField('images')
 
-    language = models.ForeignKey(language, on_delete=models.CASCADE, null=True, blank=True
-                                 )
-    genre = models.ForeignKey(genre, on_delete=models.CASCADE, null=True, blank=True, related_name='movies'
-                              )
+    language = models.ManyToManyField(
+        language, related_name="book_list", blank=True)
+    genre = models.ManyToManyField(genre, related_name="book_list", blank=True)
 
 
 class rating(models.Model):
