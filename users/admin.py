@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import movie, genre, language, rating
+from .models import movie, genre, language, rating, user
 # Register your models here.
 
 
@@ -19,7 +19,13 @@ class RatingAdmin(admin.ModelAdmin):
     list_display = ('rating', 'comment', 'movie', 'user')
 
 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'email', 'is_admin')
+
+
 admin.site.register(language, LanguageAdmin)
+admin.site.register(user, UserAdmin)
+
 admin.site.register(movie, MovieAdmin)
 admin.site.register(genre, GenreAdmin)
 admin.site.register(rating, RatingAdmin)

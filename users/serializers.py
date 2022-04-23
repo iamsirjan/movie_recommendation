@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('user_id', 'username', 'email', 'firstname',
+        fields = ('user_id', 'username', 'email', 'firstname', 'image',
                   'lastname', 'password', 're_password', 'is_active', 'is_admin')
         extra_kwargs = {'user_id': {'read_only': True}, 'password': {'write_only': True}, 're_password': {'write_only': True},
                         'username': {'write_only': True}, 'lastname': {'read_only': True}, 'is_active': {'read_only': True}, 'is_admin': {'read_only': True}}
@@ -96,11 +96,26 @@ class MovieSerializer(serializers.ModelSerializer):
             'video',
             'language',
             'genre',
+            'image',
+            'description',
+            'releasedAt',
+            'movieDuration',
+            'ratedfor',
+            'actors',
+            'director',
+            'is_banner',
+
 
         )
 
 
 class RatingSerializer(serializers.HyperlinkedModelSerializer):
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=True, allow_null=True)
+
+    movie = serializers.PrimaryKeyRelatedField(
+        queryset=movie.objects.all(), required=True, allow_null=True)
 
     class Meta:
         model = rating
@@ -111,3 +126,7 @@ class RatingSerializer(serializers.HyperlinkedModelSerializer):
             'user',
             'movie',
         )
+
+
+class RecommendSerializer(serializers.Serializer):
+    id = serializers.IntegerField()

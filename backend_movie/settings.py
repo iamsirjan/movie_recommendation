@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     "rest_framework",
     'users',
 
@@ -67,7 +69,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'  # 'http://myhost:port/media/'
 
 AUTH_USER_MODEL = 'users.user'
 ROOT_URLCONF = 'backend_movie.urls'
@@ -88,7 +93,7 @@ TEMPLATES = [
     },
 ]
 
-
+CORS_ORIGIN_ALLOW_ALL = True
 WSGI_APPLICATION = 'backend_movie.wsgi.application'
 
 
