@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     "rest_framework",
     'users',
+    'django_extensions'
 
 ]
 REST_FRAMEWORK = {
@@ -102,11 +103,18 @@ WSGI_APPLICATION = 'backend_movie.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'movie_recomen',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode = 'STRICT_TRANS_TABLES'",
+            # 'read_default_file': '/etc/mysql/my.cnf',
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

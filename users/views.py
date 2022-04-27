@@ -63,6 +63,14 @@ class MovieGetViewSet(generics.ListAPIView):
     serializer_class = MovieSerializer
 
 
+class MovieApiAction(generics.UpdateAPIView, generics.DestroyAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = movie.objects.all()
+
+    serializer_class = MovieSerializer
+    lookup_field = 'movie_id'
+
+
 class RatingViewSet(generics.ListAPIView, generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
 
