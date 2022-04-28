@@ -1,11 +1,11 @@
+from rest_framework import viewsets, permissions, status
+from rest_framework.views import APIView
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
 from ast import literal_eval
 import pandas as pd
 from rest_framework.response import Response
-
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from rest_framework.views import APIView
-from rest_framework import viewsets, permissions, status
+pd.options.mode.chained_assignment = None
 movies_df = pd.read_csv("./users_movie.csv")
 genres_df = pd.read_csv("./users_genre.csv")
 
@@ -35,7 +35,7 @@ def create_soup(x):
 
 movies_columns["soup"] = movies_columns.apply(create_soup, axis=1)
 
-print(movies_columns["soup"].head())
+
 count_vectorizer = CountVectorizer(stop_words="english")
 count_matrix = count_vectorizer.fit_transform(movies_columns["soup"])
 
@@ -68,5 +68,5 @@ class ForYou(APIView):
         moviename = request.data['moviename']
 
         my_result = get_recommendations(moviename)
-        print(my_result)
+
         return Response(my_result)

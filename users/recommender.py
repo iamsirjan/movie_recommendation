@@ -10,12 +10,13 @@ from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
 
 from sklearn.metrics.pairwise import cosine_similarity
-Movies = pd.read_csv("./movie.csv")
-Ratings = pd.read_csv("./rating.csv")
+
+Movies = pd.read_csv("./users_movie.csv")
+Ratings = pd.read_csv("./users_rating.csv")
 
 
 Mean = Ratings.groupby(by="user_id", as_index=False)['rating'].mean()
-print(Mean)
+
 Rating_avg = pd.merge(Ratings, Mean, on='user_id')
 Rating_avg['adg_rating'] = Rating_avg['rating_x']-Rating_avg['rating_y']
 Rating_avg.head()
@@ -30,14 +31,12 @@ final_movie = final.fillna(final.mean(axis=0))
 
 # Replacing NaN by user Average
 final_user = final.apply(lambda row: row.fillna(row.mean()), axis=1)
-print(final_movie.head())
-print(final_user.head())
 
 b = cosine_similarity(final_user)
 
 np.fill_diagonal(b, 0)
 similarity_with_user = pd.DataFrame(b, index=final_user.index)
-print(similarity_with_user)
+
 similarity_with_user.columns = final_user.index
 similarity_with_user.head()
 
@@ -56,11 +55,11 @@ def find_n_neighbours(df, n):
     return df
 
 
-sim_user_30_u = find_n_neighbours(similarity_with_user, 3)
-print(sim_user_30_u.head())
+sim_user_30_u = find_n_neighbours(similarity_with_user, 2)
+
 sim_user_30_u.head()
 
-sim_user_30_m = find_n_neighbours(similarity_with_movie, 3)
+sim_user_30_m = find_n_neighbours(similarity_with_movie, 2)
 sim_user_30_m.head()
 
 
@@ -132,13 +131,6 @@ def User_item_score1(user):
     return Movie_Names
 
 
-# user = 2
-# predicted_movies = User_item_score1(user)
-
-# # for i in predicted_movies:
-# #     print(i)
-
-
 class MyView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -146,5 +138,5 @@ class MyView(APIView):
         userid = request.data['userid']
 
         my_result = User_item_score1(userid)
-        print(my_result)
+
         return Response(my_result)
